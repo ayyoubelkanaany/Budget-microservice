@@ -108,17 +108,20 @@ public class BudgetServiceImpl implements BudgetService{
 
 	@Override
 	public int save(Budget budget,List<BudgetDepartementVo> budgetDepartementVos) {
+		double MontantFonctionement =0;
+		double MontantInvestisement =0;
 		Budget loadedBudget = findByAnnee((budget.getAnnee()));
 		if(loadedBudget != null) {
 			if(budgetDepartementVos.isEmpty() || budgetDepartementVos==null) {
 			}
 			else {
 			   for(int i=0;i<budgetDepartementVos.size();i++) {
-				   loadedBudget.setMontantFonctionement(loadedBudget.getMontantFonctionement()+ numbeUtil.toDouble(budgetDepartementVos.get(i).getMontantFonctionement()));
-				   loadedBudget.setMontantInvestisement(loadedBudget.getMontantFonctionement()+ numbeUtil.toDouble(budgetDepartementVos.get(i).getMontantFonctionement()));
+				   MontantFonctionement+= numbeUtil.toDouble(budgetDepartementVos.get(i).getMontantFonctionement());
+				   MontantInvestisement+= numbeUtil.toDouble(budgetDepartementVos.get(i).getMontantFonctionement());
 				   this.budgetDepartementRequiredRest.save(budgetDepartementVos.get(i));
 			   }
-			  
+			   loadedBudget.setMontantInvestisement(loadedBudget.getMontantFonctionement()+MontantFonctionement);
+			   loadedBudget.setMontantFonctionement(loadedBudget.getMontantInvestisement()+MontantInvestisement);
 			}
 			loadedBudget.setMontantTotal(loadedBudget.getMontantFonctionement()+loadedBudget.getMontantInvestisement());
 			budgetRepository.save(loadedBudget);
@@ -131,11 +134,12 @@ public class BudgetServiceImpl implements BudgetService{
 			
 			else {
 			   for(int i=0;i<budgetDepartementVos.size();i++) {
-				   budget.setMontantFonctionement(budget.getMontantFonctionement()+ numbeUtil.toDouble(budgetDepartementVos.get(i).getMontantFonctionement()));
-				   budget.setMontantInvestisement(budget.getMontantFonctionement()+ numbeUtil.toDouble(budgetDepartementVos.get(i).getMontantFonctionement()));
+				   MontantFonctionement+= numbeUtil.toDouble(budgetDepartementVos.get(i).getMontantFonctionement());
+				   MontantInvestisement+= numbeUtil.toDouble(budgetDepartementVos.get(i).getMontantFonctionement());
 				   this.budgetDepartementRequiredRest.save(budgetDepartementVos.get(i));
 			   }
-		      
+			   budget.setMontantInvestisement(MontantFonctionement);
+			   budget.setMontantFonctionement(MontantInvestisement);
 			   budget.setMontantTotal(budget.getMontantFonctionement()+budget.getMontantInvestisement());
 			   budgetRepository.save(budget);
 			}

@@ -17,7 +17,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api("Cette class permet de gerer les traiements relative aux budgets à savoir Save, FindAll, ...etc.")
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class BudgetRest {
 	@Autowired
